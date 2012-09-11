@@ -12,13 +12,16 @@ namespace Magurany.Web.Routing.RegularExpressions
 	/// the <see cref="RegexRoute"/> class doesn't inherit from <see cref="System.Web.Http.WebHost.Routing.HttpWebRoute"/>,
 	/// which is internal.
 	/// </summary>
-	internal class RegexRouteHandler : DelegatingHandler
+	public class RegexRouteHandler : DelegatingHandler
 	{
 		private readonly HttpMessageInvoker m_DefaultInvoker;
 
 		public RegexRouteHandler(HttpConfiguration configuration)
 		{
-			//ThrowHelper.CheckArgumentNull(configuration, "configuration");
+			if(configuration == null)
+			{
+				throw new ArgumentNullException("configuration");
+			}
 
 			m_DefaultInvoker = new HttpMessageInvoker(new HttpControllerDispatcher(configuration));
 		}

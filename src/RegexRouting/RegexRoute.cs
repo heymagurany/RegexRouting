@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Http.WebHost;
 using System.Web.Routing;
 
 namespace Magurany.Web.Routing.RegularExpressions
@@ -10,16 +10,22 @@ namespace Magurany.Web.Routing.RegularExpressions
 	{
 		private readonly Regex m_Pattern;
 
-		public RegexRoute(string pattern, RouteValueDictionary defaults) : base(null, defaults, HttpControllerRouteHandler.Instance)
+		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : base(url, routeHandler)
 		{
-			//ThrowHelper.CheckArgumentNullOrEmpty(pattern, "pattern");
+			if(pattern == null)
+			{
+				throw new ArgumentNullException("pattern");
+			}
 
 			m_Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		}
 
 		public override RouteData GetRouteData(HttpContextBase httpContext)
 		{
-			//ThrowHelper.CheckArgumentNull(httpContext, "httpContext");
+			if(httpContext == null)
+			{
+				throw new ArgumentNullException("httpContext");
+			}
 
 			Match match = m_Pattern.Match(httpContext.Request.AppRelativeCurrentExecutionFilePath);
 
@@ -50,16 +56,6 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 				return data;
 			}
-
-			return null;
-		}
-
-		public override VirtualPathData GetVirtualPath(RequestContext requestContext, RouteValueDictionary values)
-		{
-			//ThrowHelper.CheckArgumentNull(requestContext, "requestContext");
-			//ThrowHelper.CheckArgumentNull(values, "values");
-
-			// TODO: Replace the matching groups in the regex with values from the dictionary.
 
 			return null;
 		}
