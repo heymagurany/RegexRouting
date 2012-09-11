@@ -14,8 +14,6 @@
 		<copyright>Copyright 2012</copyright>
 		<tags>asp.net, mvc, web api, regex, regular expressions, routing, route</tags>
 		<dependencies>
-			<package id="Microsoft.AspNet.Mvc" version="4.0.20710.0" />
-			<package id="Microsoft.AspNet.WebApi" version="4.0.20710.0" />
 			<dependency id="WebActivator" version="1.5" />
 		</dependencies>
 	</metadata>
