@@ -2,21 +2,48 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<NuGetToolPath Condition="'$(NugetToolPath)'==''">$(MSBuildProjectDirectory)\nuget\NuGet.exe</NuGetToolPath>
-		<NuGetSpecFileName Condition="'$(NuGetSpecFileName)'==''">$(MSBuildProjectDirectory)\nuget\RegexRouting.nuspec</NuGetSpecFileName>
+		<NuGetToolPath Condition="'$(NugetToolPath)'==''">$(NuGetDirectory)\NuGet.exe</NuGetToolPath>
+		<NuGetSpecFileName Condition="'$(NuGetSpecFileName)'==''">$(NuGetDirectory)\RegexRouting.nuspec</NuGetSpecFileName>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<AfterBuildDependsOn>
-			Pack
+			Pack;
+			Push
 		</AfterBuildDependsOn>
 	</PropertyGroup>
 	
 	<Target Name="AfterBuild" DependsOnTargets="$(AfterBuildDependsOn)" />
 
 	<Target Name="Pack">
+		<MSBuild
+			Projects="$(SolutionDir)\RegexRouting\RegexRouting.csproj"
+			Properties="Configuration=$(Configuration);
+			            OutDir=$(OutDir);
+						SignAssembly=true;
+						AssemblyOriginatorKeyFile=$(AssemblyOriginatorKeyFile)"
+			Targets="BuiltProjectOutputGroup">
+			<Output ItemName="NuGetPackageOutputFileNames" TaskParameter="TargetOutputs" />
+		</MSBuild>
+		<MakeDir
+			Directories="$(NuGetDirectory)\lib\net40">
+			<Output PropertyName="NuGetpackageTargetDirectory" TaskParameter="DirectoriesCreated" />
+		</MakeDir>
+		<Copy
+			SourceFiles="@(NuGetPackageOutputFileNames)"
+			DestinationFiles="@(NuGetPackageOutputFileNames->'$(NuGetpackageTargetDirectory)\%(Filename)%(Extension)')" />
 		<Exec
 			Command="&quot;$(NuGetToolPath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;" />
+		<CreateItem
+			Include="$(OutDir)\*.nupkg">
+			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
+		</CreateItem>
+	</Target>
+
+	<Target Name="Push"
+		Condition="'$(NuGetPush)'=='true'">
+		<Exec
+			Command="&quot;$(NuGetToolPath)&quot; push &quot;%(NuGetPackageFileName.FullPath)&quot; $(NuGetApiKey)" />
 	</Target>
 	
 </Project> 

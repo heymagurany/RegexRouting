@@ -2,6 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Build" ToolsVersion="4.0">
 
 	<PropertyGroup>
+		<NuGetDirectory>$(MSBuildProjectDirectory)\nuget</NuGetDirectory>
 		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildProjectDirectory)\src</SolutionDir>
 		<SolutionFileName>$(SolutionDir)\RegexRouting.sln</SolutionFileName>
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
@@ -25,8 +26,7 @@
 		<MSBuild
 			Projects="$(SolutionFileName)"
 			Properties="Configuration=$(Configuration);
-			            Platform=$(Platform);
-						OutDir=$(OutDir)"
+						OutDir=$(OutDir);"
 			Targets="Build" />
 	</Target>
 
@@ -34,6 +34,6 @@
 	
 	<!-- TODO: Run tests... WHen I create them -->
 
-	<Import Project="$(MSBuildProjectDirectory)\nuget\NuGet.targets" />
+	<Import Project="$(NuGetDirectory)\NuGet.targets" />
 
 </Project> 
