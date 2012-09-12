@@ -1,8 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Build" ToolsVersion="4.0">
 
-	<Target Name="Build">
-		
+	<PropertyGroup>
+		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildProjectDirectory)\src</SolutionDir>
+		<SolutionFileName>$(SolutionDir)\RegexRouting.sln</SolutionFileName>
+		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
+		<Platform Condition="'$(Platform)'==''">Any CPU</Platform>
+		<OutDir Condition="'$(OutDir)'==''">$(MSBuildProjectDirectory)\bin\$(Configuration)\</OutDir>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<BuildDependsOn>
+			BeforeBuild;
+			CoreBuild;
+			AfterBuild
+		</BuildDependsOn>
+	</PropertyGroup>
+
+	<Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+
+	<Target Name="BeforeBuild" />
+
+	<Target Name="CoreBuild">
+		<MSBuild
+			Projects="$(SolutionFileName)"
+			Properties="Configuration=$(Configuration);
+			            Platform=$(Platform);
+						OutDir=$(OutDir)"
+			Targets="Build" />
 	</Target>
+
+	<Target Name="AfterBuild" />
 	
+	<!-- TODO: Run tests... WHen I create them -->
+
+	<Import Project="$(MSBuildProjectDirectory)\nuget\NuGet.targets" />
+
 </Project> 

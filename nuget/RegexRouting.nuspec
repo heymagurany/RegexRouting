@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Magurany.Web.Routing.RegularExpressions</id>
+		<version>1.0.0.0</version>
+		<title>Regular Expression Routing</title>
+		<authors>Matt Magurany</authors>
+		<owners>Matt Magurany</owners>
+		<licenseUrl>http://opensource.org/licenses/mit-license.php</licenseUrl>
+		<projectUrl>https://github.com/honkywater/RegexRouting</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Define your routes using regular expressions in ASP.NET MVC and Web API</description>
+		<releaseNotes>Initial Release</releaseNotes>
+		<copyright>Copyright 2012</copyright>
+		<tags>asp.net, mvc, web api, regex, regular expressions, routing, route</tags>
+		<dependencies>
+			<dependency id="WebActivator" version="1.5" />
+			<dependency id="Microsoft.AspNet.Mvc" version="4.0.20710.0" />
+			<dependency id="Microsoft.AspNet.WebApi" version="4.0.20710.0" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="RegexRouting.cs.pp" target="content\App_Start" />
+		<file src="RegexRouteConfig.cs.pp" target="content\App_Start" />
+	</files>
+</package>
