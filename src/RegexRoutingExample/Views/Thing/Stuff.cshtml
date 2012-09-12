@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "View1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Here's the stuff for @ViewBag.ThingUri</h2>
+<ol>
+@foreach(string stuff in Model)
+{
+	<li>@stuff</li>
+}
+</ol>
+
+@if(!string.IsNullOrWhiteSpace(ViewBag.SelectedStuff))
+{
+	<p>You selected stuff: @ViewBag.SelectedStuff</p>
+}

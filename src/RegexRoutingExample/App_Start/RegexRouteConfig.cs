@@ -18,10 +18,16 @@ namespace RegexRoutingExample
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			routes.MapRegexRoute(
+				name: "Thing",
+				url: "{thingUri}/{action}/{stuffID}",
+				pattern: @"^~(?<thingUri>(/thing/\d+)+){1}(/(?<action>[a-z]+)(/(?<stuffID>[a-z0-9_\-]+))?)?",
+				defaults: new { controller = "Thing", action = "Index", stuffID = RouteParameter.Optional }
+			);
 			routes.MapRoute(
 				name: "Default",
-				url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+				url: "",
+				defaults: new { controller = "Home", action = "Index" }
 			);
 		}
 	}

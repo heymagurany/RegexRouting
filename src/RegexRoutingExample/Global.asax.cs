@@ -14,7 +14,6 @@ namespace RegexRoutingExample
 		{
 			AreaRegistration.RegisterAllAreas();
 
-			WebApiConfig.Register(GlobalConfiguration.Configuration);
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RegexRouteConfig.EnableRegexHttpRoutes(GlobalConfiguration.Configuration);
 			RegexRouteConfig.RegisterRoutes(RouteTable.Routes);
