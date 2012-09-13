@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
+	<Import Project="$(SolutionDir)\.nuget\NuGet.targets"/>
+
 	<PropertyGroup>
-		<NuGetToolPath Condition="'$(NugetToolPath)'==''">$(NuGetDirectory)\NuGet.exe</NuGetToolPath>
+		<NuGetExePath Condition="'$(NuGetExePath)'==''">$(NuGetDirectory)\NuGet.exe</NuGetExePath>
 		<NuGetSpecFileName Condition="'$(NuGetSpecFileName)'==''">$(NuGetDirectory)\RegexRouting.nuspec</NuGetSpecFileName>
 	</PropertyGroup>
 
@@ -29,11 +31,17 @@
 			Directories="$(NuGetDirectory)\lib\net40">
 			<Output PropertyName="NuGetpackageTargetDirectory" TaskParameter="DirectoriesCreated" />
 		</MakeDir>
+		<CreateItem
+			Include="$(OutDir)\*.nupkg">
+			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
+		</CreateItem>
+		<Delete
+			Files="@(NuGetPackageFileName)" />
 		<Copy
 			SourceFiles="@(NuGetPackageOutputFileNames)"
 			DestinationFiles="@(NuGetPackageOutputFileNames->'$(NuGetpackageTargetDirectory)\%(Filename)%(Extension)')" />
 		<Exec
-			Command="&quot;$(NuGetToolPath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;" />
+			Command="&quot;$(NuGetExePath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;" />
 		<CreateItem
 			Include="$(OutDir)\*.nupkg">
 			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
@@ -43,7 +51,7 @@
 	<Target Name="Push"
 		Condition="'$(NuGetPush)'=='true'">
 		<Exec
-			Command="&quot;$(NuGetToolPath)&quot; push &quot;%(NuGetPackageFileName.FullPath)&quot; $(NuGetApiKey)" />
+			Command="&quot;$(NuGetExePath)&quot; push &quot;%(NuGetPackageFileName.FullPath)&quot; $(NuGetApiKey)" />
 	</Target>
 	
 </Project> 
