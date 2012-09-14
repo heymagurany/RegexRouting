@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<PropertyGroup>
+		<Version Condition="'$(Version)'==''">1.0.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="AssemblyCompany">
+			<_Parameter1>Matt Magurany</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="AssemblyProduct">
+			<_Parameter1>ASP.NET Regular Expression Routing</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="AssemblyCopyright">
+			<_Parameter1>Copyright © Matt Magurany 2012</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<BeforeBuildDependsOn>
+			GenerateSolutionInfo;
+			$(BeforeBuild)
+		</BeforeBuildDependsOn>
+	</PropertyGroup>
+
+	<Target Name="BeforeBuild" DependsOnTargets="$(BeforeBuildDependsOn)" />
+
+	<Target Name="GenerateSolutionInfo">
+		<CreateItem
+			Include="AssemblyVersion;
+			         AssemblyFileVersion"
+			AdditionalMetadata="_Parameter1=$(Version)">
+			<Output ItemName="AssemblyAttribute" TaskParameter="Include" />
+		</CreateItem>
+		<WriteCodeFragment
+			AssemblyAttributes="@(AssemblyAttribute)"
+			Language="C#"
+			OutputFile="$(SolutionDir)\SolutionInfo.cs">
+			<Output ItemName="Compile" TaskParameter="OutputFile" />
+		</WriteCodeFragment>
+	</Target>
+
+</Project> 
