@@ -4,8 +4,16 @@
 	<Import Project="$(SolutionDir)\.nuget\NuGet.targets"/>
 
 	<PropertyGroup>
+		<MajorNumber Condition="'$(MajorNumber)'==''">0</MajorNumber>
+		<MinorNumber Condition="'$(MinorNumber)'==''">0</MinorNumber>
+		<PatchNumber Condition="'$(PatchNumber)'==''">0</PatchNumber>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<NuGetDirectory Condition="'$(NuGetDirectory)'==''">$(MSBuildProjectDirectory)</NuGetDirectory>
 		<NuGetExePath Condition="'$(NuGetExePath)'==''">$(NuGetDirectory)\NuGet.exe</NuGetExePath>
 		<NuGetSpecFileName Condition="'$(NuGetSpecFileName)'==''">$(NuGetDirectory)\RegexRouting.nuspec</NuGetSpecFileName>
+		<NuGetPackageVersion>$(MajorNumber).$(MinorNumber).$(PatchNumber)</NuGetPackageVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -21,9 +29,7 @@
 		<MSBuild
 			Projects="$(SolutionDir)\RegexRouting\RegexRouting.csproj"
 			Properties="Configuration=$(Configuration);
-			            OutDir=$(OutDir);
-						SignAssembly=true;
-						AssemblyOriginatorKeyFile=$(AssemblyOriginatorKeyFile)"
+			            OutDir=$(OutDir)"
 			Targets="BuiltProjectOutputGroup">
 			<Output ItemName="NuGetPackageOutputFileNames" TaskParameter="TargetOutputs" />
 		</MSBuild>
@@ -31,27 +37,28 @@
 			Directories="$(NuGetDirectory)\lib\net40">
 			<Output PropertyName="NuGetpackageTargetDirectory" TaskParameter="DirectoriesCreated" />
 		</MakeDir>
-		<CreateItem
-			Include="$(OutDir)\*.nupkg">
-			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
-		</CreateItem>
 		<Delete
-			Files="@(NuGetPackageFileName)" />
+			Files="$(OutDir)*.nupkg" />
 		<Copy
 			SourceFiles="@(NuGetPackageOutputFileNames)"
 			DestinationFiles="@(NuGetPackageOutputFileNames->'$(NuGetpackageTargetDirectory)\%(Filename)%(Extension)')" />
 		<Exec
-			Command="&quot;$(NuGetExePath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;" />
+			Command="&quot;$(NuGetExePath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Version $(NuGetPackageVersion) -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;"
+			WorkingDirectory="$(NuGetDirectory)" />
 		<CreateItem
-			Include="$(OutDir)\*.nupkg">
+			Include="$(OutDir)*.$(NuGetPackageVersion).nupkg">
 			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
 		</CreateItem>
 	</Target>
 
-	<Target Name="Push"
-		Condition="'$(NuGetPush)'=='true'">
+	<Target Name="Push">
 		<Exec
-			Command="&quot;$(NuGetExePath)&quot; push &quot;%(NuGetPackageFileName.FullPath)&quot; $(NuGetApiKey)" />
+			Command="&quot;$(NuGetExePath)&quot; push &quot;%(NuGetPackageFileName.FullPath)&quot; $(NuGetApiKey)"
+			WorkingDirectory="$(NuGetDirectory)"
+			Condition="'$(NuGetSource)'==''" />
+		<Copy
+			SourceFiles="@(NuGetPackageFileName)"
+			DestinationFiles="@(NuGetPackageFileName->'$(NuGetSource)\%(Filename)%(Extension)')" />
 	</Target>
 	
 </Project> 
