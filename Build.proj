@@ -6,13 +6,27 @@
 		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildProjectDirectory)\src</SolutionDir>
 		<SolutionFileName>$(SolutionDir)\RegexRouting.sln</SolutionFileName>
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
-		<Platform Condition="'$(Platform)'==''">Any CPU</Platform>
+		<Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
 		<OutDir Condition="'$(OutDir)'==''">$(MSBuildProjectDirectory)\bin\$(Configuration)\</OutDir>
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<MajorNumber>1</MajorNumber>
+		<MinorNumber>0</MinorNumber>
+		<PatchNumber>3</PatchNumber>
+		<BuildNumber>0</BuildNumber>
+		<Version>"$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Projects
+			Include="$(SolutionDir)\**\*.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
 		<BuildDependsOn>
 			BeforeBuild;
+			IncrementBuildNumber;
 			CoreBuild;
 			AfterBuild
 		</BuildDependsOn>
@@ -22,11 +36,33 @@
 
 	<Target Name="BeforeBuild" />
 
+	<Target Name="IncrementBuildNumber">
+		<ReadLinesFromFile
+			File="Build.txt">
+			<Output PropertyName="BuildNumber" TaskParameter="Lines" />
+		</ReadLinesFromFile>
+		<CreateProperty
+			Value="$([MSBuild]::Add($(BuildNumber), 1))">
+			<Output PropertyName="BuildNumber" TaskParameter="Value" />
+		</CreateProperty>
+		<WriteLinesToFile
+			File="Build.txt"
+			Lines="$(BuildNumber)"
+			Overwrite="true" />
+		<CreateProperty
+			Value="$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)">
+			<Output PropertyName="Version" TaskParameter="Value" />
+		</CreateProperty>
+	</Target>
+
 	<Target Name="CoreBuild">
 		<MSBuild
-			Projects="$(SolutionFileName)"
+			Projects="@(Projects)"
 			Properties="Configuration=$(Configuration);
-						OutDir=$(OutDir);"
+				        OutDir=$(OutDir);
+				        SignAssembly=true;
+						Version=$(Version);
+				        AssemblyOriginatorKeyFile=$(AssemblyOriginatorKeyFile)"
 			Targets="Build" />
 	</Target>
 
