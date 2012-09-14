@@ -30,3 +30,4 @@ _ReSharper*/
 $tf*/
 nuget/lib
 src/packages
+src/SolutionInfo.cs
