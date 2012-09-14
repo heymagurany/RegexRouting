@@ -16,6 +16,11 @@
 		<NuGetPackageVersion>$(MajorNumber).$(MinorNumber).$(PatchNumber)</NuGetPackageVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<NuGetPackageProject
+			Include="$(SolutionDir)\RegexRouting\RegexRouting.csproj" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<AfterBuildDependsOn>
 			Pack;
@@ -25,28 +30,16 @@
 	
 	<Target Name="AfterBuild" DependsOnTargets="$(AfterBuildDependsOn)" />
 
-	<Target Name="Pack">
-		<MSBuild
-			Projects="$(SolutionDir)\RegexRouting\RegexRouting.csproj"
-			Properties="Configuration=$(Configuration);
-			            OutDir=$(OutDir)"
-			Targets="BuiltProjectOutputGroup">
-			<Output ItemName="NuGetPackageOutputFileNames" TaskParameter="TargetOutputs" />
-		</MSBuild>
-		<MakeDir
-			Directories="$(NuGetDirectory)\lib\net40">
-			<Output PropertyName="NuGetpackageTargetDirectory" TaskParameter="DirectoriesCreated" />
-		</MakeDir>
+	<Target Name="Pack"
+		Inputs="@(NuGetPackageProject)"
+		Outputs="$(OutDir)*.nupkg">
 		<Delete
 			Files="$(OutDir)*.nupkg" />
-		<Copy
-			SourceFiles="@(NuGetPackageOutputFileNames)"
-			DestinationFiles="@(NuGetPackageOutputFileNames->'$(NuGetpackageTargetDirectory)\%(Filename)%(Extension)')" />
 		<Exec
-			Command="&quot;$(NuGetExePath)&quot; pack &quot;$(NuGetSpecFileName)&quot; -Version $(NuGetPackageVersion) -Properties Configuration=$(Configuration) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;"
+			Command="&quot;$(NuGetExePath)&quot; pack &quot;%(NuGetPackageProject.FullPath)&quot; -Version $(NuGetPackageVersion) -Properties OutDir=$(OutDir) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;"
 			WorkingDirectory="$(NuGetDirectory)" />
 		<CreateItem
-			Include="$(OutDir)*.$(NuGetPackageVersion).nupkg">
+			Include="$(OutDir)*.nupkg">
 			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
 		</CreateItem>
 	</Target>

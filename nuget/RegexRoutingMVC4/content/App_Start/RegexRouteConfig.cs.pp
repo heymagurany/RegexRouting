@@ -7,21 +7,15 @@ namespace $rootnamespace$
 {
 	public class RegexRouteConfig
 	{
-		public static void EnableRegexHttpRoutes(HttpConfiguration configuration)
-		{
-			RegexRouteHandler messageHandler = new RegexRouteHandler(configuration);
-
-			configuration.MessageHandlers.Add(messageHandler);
-		}
-
 		public static void RegisterRoutes(RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute(
-				name: "Default",
-				url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+			routes.MapRegexRoute(
+				name: "Thing",
+				url: "{thingUri}/{action}/{stuffID}",
+				pattern: @"^~(?<thingUri>(/thing/\d+)+){1}(/(?<action>[a-z]+)(/(?<stuffID>[a-z0-9_\-]+))?)?",
+				defaults: new { controller = "Thing", action = "Index", stuffID = RouteParameter.Optional }
 			);
 		}
 	}
