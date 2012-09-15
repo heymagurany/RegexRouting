@@ -1,3 +1,10 @@
 Regular Expression Routing
 ==========================
-#### Define your routes using regular expressions in ASP.NET MVC and Web API.
+--------------------------
+If you run into any trouble or have any suggestions, please log them in the [Issue Tracker] (https://github.com/honkywater/RegexRouting/issues). Enjoy!
+
+### Changelog
+
+#### v1.0.3
+
+* Created the RegexRoute class, which enables developers to include a regular expression for URL matching.
