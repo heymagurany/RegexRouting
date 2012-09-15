@@ -33,10 +33,12 @@
 			AdditionalMetadata="_Parameter1=$(Version)">
 			<Output ItemName="AssemblyAttribute" TaskParameter="Include" />
 		</CreateItem>
+		<MakeDir
+			Directories="$(IntermediateOutputPath)" />
 		<WriteCodeFragment
 			AssemblyAttributes="@(AssemblyAttribute)"
 			Language="C#"
-			OutputFile="$(IntermediateOutputPath)\SolutionInfo.cs">
+			OutputFile="$(IntermediateOutputPath)SolutionInfo.cs">
 			<Output ItemName="Compile" TaskParameter="OutputFile" />
 			<Output ItemName="FileWrites" TaskParameter="OutputFile" />
 		</WriteCodeFragment>
