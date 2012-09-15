@@ -51,7 +51,8 @@
 			Condition="'$(NuGetSource)'==''" />
 		<Copy
 			SourceFiles="@(NuGetPackageFileName)"
-			DestinationFiles="@(NuGetPackageFileName->'$(NuGetSource)\%(Filename)%(Extension)')" />
+			DestinationFiles="@(NuGetPackageFileName->'$(NuGetSource)\%(Filename)%(Extension)')"
+			Condition="'$(NuGetSource)'!=''" />
 	</Target>
 	
 </Project> 
