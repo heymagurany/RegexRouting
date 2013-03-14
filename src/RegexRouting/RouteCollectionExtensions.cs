@@ -9,7 +9,7 @@ namespace Magurany.Web.Routing.RegularExpressions
 	{
 		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern)
 		{
-			return MapRegexRoute(routes, name, url, pattern, null);
+			return MapRegexHttpRoute(routes, name, url, pattern, null);
 		}
 
 		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
