@@ -48,6 +48,11 @@ namespace Magurany.Web.Routing.RegularExpressions
 			route.Constraints = new RouteValueDictionary();
 			route.DataTokens = new RouteValueDictionary();
 			route.Defaults = new RouteValueDictionary(defaults);
+			
+			// Required so that the engine can find the proper view
+			if (defaults.ContainsKey("Area")) {
+				route.DataTokens.Add("Area", route.Defaults["Area"]);
+			}
 
 			routes.Add(name, route);
 
