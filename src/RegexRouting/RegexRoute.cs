@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -9,6 +9,8 @@ namespace Magurany.Web.Routing.RegularExpressions
 	public sealed class RegexRoute : Route
 	{
 		private readonly Regex m_Pattern;
+
+		public static bool UseLegacy { get; set; }
 
 		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : base(url, routeHandler)
 		{
@@ -27,7 +29,12 @@ namespace Magurany.Web.Routing.RegularExpressions
 				throw new ArgumentNullException("httpContext");
 			}
 
-			Match match = m_Pattern.Match(httpContext.Request.AppRelativeCurrentExecutionFilePath);
+			string url = httpContext.Request.AppRelativeCurrentExecutionFilePath;
+			if (!UseLegacy)
+			{
+				url = url.Substring(2) + httpContext.Request.PathInfo;
+			}
+			Match match = m_Pattern.Match(url);
 
 			if(match.Success)
 			{
@@ -51,6 +58,14 @@ namespace Magurany.Web.Routing.RegularExpressions
 					if(!data.Values.ContainsKey(pair.Key))
 					{
 						data.Values.Add(pair.Key, pair.Value);
+					}
+				}
+
+				if (DataTokens != null)
+				{
+					foreach (KeyValuePair<string, object> pair in DataTokens)
+					{
+						data.DataTokens[pair.Key] = pair.Value;
 					}
 				}
 
