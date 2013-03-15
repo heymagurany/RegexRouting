@@ -11,6 +11,8 @@ namespace Magurany.Web.Routing.RegularExpressions
 		private readonly Regex m_Pattern;
 
 		public static bool UseLegacy { get; set; }
+		
+		public static bool AutoConstraints { get; set; }
 
 		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : base(url, routeHandler)
 		{
