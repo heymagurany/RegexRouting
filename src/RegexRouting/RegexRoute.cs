@@ -12,14 +12,25 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 		public static bool UseLegacy { get; set; }
 
-		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : base(url, routeHandler)
+		public static bool AutoConstraints { get; set; }
+
+		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : this(url, pattern, null, routeHandler)
 		{
-			if(pattern == null)
+		}
+
+		public RegexRoute(string url, string pattern, object constraints, IRouteHandler routeHandler) : base(url, routeHandler)
+		{
+			if (pattern == null)
 			{
 				throw new ArgumentNullException("pattern");
 			}
 
 			m_Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			Constraints = new RouteValueDictionary(constraints);
+			if (AutoConstraints)
+			{
+				GenerateConstraintsFromPattern(pattern);
+			}
 		}
 
 		public override RouteData GetRouteData(HttpContextBase httpContext)
@@ -73,6 +84,29 @@ namespace Magurany.Web.Routing.RegularExpressions
 			}
 
 			return null;
+		}
+
+		private void GenerateConstraintsFromPattern(string pattern) {
+			Regex names = new Regex(@"{(\w+)}");
+			MatchCollection matches = names.Matches(Url);
+
+			foreach (Match match in matches)
+			{
+				string key = match.Groups[1].ToString();
+				if (!this.Constraints.ContainsKey(key))
+				{
+					// Using the amazing pattern found here: http://blogs.msdn.com/b/bclteam/archive/2005/03/15/396452.aspx
+					Regex r = new Regex(String.Format(@"\(\?<{0}>([^\(\)]*(((?<Open>\()[^\(\)]*)+((?<Close-Open>\))[^\(\)]*)+)*(?(Open)(?!)))\)", key));
+					MatchCollection constraint = r.Matches(pattern);
+					if (constraint.Count == 1) {
+						this.Constraints[match.Groups[1].ToString()] = constraint[0].Groups[1].ToString();
+					}
+					else
+					{
+						throw new InvalidOperationException("constraints");
+					}
+				}
+			}
 		}
 	}
 }
