@@ -58,6 +58,16 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
 		{
+			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces, IRouteHandler routeHandler)
+		{
+			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
+		{
 			if(routes == null)
 			{
 				throw new ArgumentNullException("routes");
@@ -73,9 +83,8 @@ namespace Magurany.Web.Routing.RegularExpressions
 				throw new ArgumentNullException("pattern");
 			}
 
-			RegexRoute route = new RegexRoute(url, pattern, routeHandler);
+			RegexRoute route = new RegexRoute(url, pattern, constraints, routeHandler);
 			route.Defaults = new RouteValueDictionary(defaults);
-			route.Constraints = new RouteValueDictionary(constraints);
 			route.DataTokens = new RouteValueDictionary();
 
 			if(route.Defaults.ContainsKey("Area"))

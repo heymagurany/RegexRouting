@@ -14,20 +14,18 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 		public static bool AutoConstraints { get; set; }
 
-		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : this(url, pattern, null, routeHandler)
-		{
-		}
+		public RegexRoute(string url, string pattern, IRouteHandler routeHandler) : this(url, pattern, null, routeHandler) { }
 
 		public RegexRoute(string url, string pattern, object constraints, IRouteHandler routeHandler) : base(url, routeHandler)
 		{
-			if (pattern == null)
+			if(pattern == null)
 			{
 				throw new ArgumentNullException("pattern");
 			}
 
 			m_Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 			Constraints = new RouteValueDictionary(constraints);
-			if (AutoConstraints)
+			if(AutoConstraints)
 			{
 				GenerateConstraintsFromPattern(pattern);
 			}
@@ -41,7 +39,7 @@ namespace Magurany.Web.Routing.RegularExpressions
 			}
 
 			string url = httpContext.Request.AppRelativeCurrentExecutionFilePath;
-			if (!UseLegacy)
+			if(!UseLegacy)
 			{
 				url = url.Substring(2) + httpContext.Request.PathInfo;
 			}
@@ -72,9 +70,9 @@ namespace Magurany.Web.Routing.RegularExpressions
 					}
 				}
 
-				if (DataTokens != null)
+				if(DataTokens != null)
 				{
-					foreach (KeyValuePair<string, object> pair in DataTokens)
+					foreach(KeyValuePair<string, object> pair in DataTokens)
 					{
 						data.DataTokens[pair.Key] = pair.Value;
 					}
@@ -86,24 +84,32 @@ namespace Magurany.Web.Routing.RegularExpressions
 			return null;
 		}
 
-		private void GenerateConstraintsFromPattern(string pattern) {
+		private void GenerateConstraintsFromPattern(string pattern)
+		{
 			Regex names = new Regex(@"{(\w+)}");
 			MatchCollection matches = names.Matches(Url);
 
-			foreach (Match match in matches)
+			foreach(Match match in matches)
 			{
-				string key = match.Groups[1].ToString();
-				if (!this.Constraints.ContainsKey(key))
+				if(match.Groups.Count > 1)
 				{
-					// Using the amazing pattern found here: http://blogs.msdn.com/b/bclteam/archive/2005/03/15/396452.aspx
-					Regex r = new Regex(String.Format(@"\(\?<{0}>([^\(\)]*(((?<Open>\()[^\(\)]*)+((?<Close-Open>\))[^\(\)]*)+)*(?(Open)(?!)))\)", key));
-					MatchCollection constraint = r.Matches(pattern);
-					if (constraint.Count == 1) {
-						this.Constraints[match.Groups[1].ToString()] = constraint[0].Groups[1].ToString();
-					}
-					else
+					string key = match.Groups[1].Value;
+					if(!Constraints.ContainsKey(key))
 					{
-						throw new InvalidOperationException("constraints");
+						// Using the amazing pattern found here: http://blogs.msdn.com/b/bclteam/archive/2005/03/15/396452.aspx
+						Regex r = new Regex(String.Format(@"\(\?<{0}>([^\(\)]*(((?<Open>\()[^\(\)]*)+((?<Close-Open>\))[^\(\)]*)+)*(?(Open)(?!)))\)", key));
+						MatchCollection constraint = r.Matches(pattern);
+						if(constraint.Count == 1)
+						{
+							if(constraint[0].Groups.Count > 1)
+							{
+								Constraints[key] = constraint[0].Groups[1].ToString();
+							}
+						}
+						else
+						{
+							throw new InvalidOperationException("constraints");
+						}
 					}
 				}
 			}
