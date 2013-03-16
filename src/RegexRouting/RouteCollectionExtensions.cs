@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Web.Http.WebHost;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Http.WebHost;
 
 namespace Magurany.Web.Routing.RegularExpressions
 {
@@ -27,7 +27,36 @@ namespace Magurany.Web.Routing.RegularExpressions
 			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
 		}
 
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces)
+		{
+			return MapRegexRoute(routes, name, url, pattern, namespaces, new MvcRouteHandler());
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints)
+		{
+			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces)
+		{
+			return MapRegexRoute(routes, name, url, pattern, defaults, null, namespaces, new MvcRouteHandler());
+		}
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces)
+		{
+			return MapRegexRoute(routes, name, url, pattern, defaults, constraints, null, new MvcRouteHandler());
+		}
+
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, IRouteHandler routeHandler)
+		{
+			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces, IRouteHandler routeHandler)
+		{
+			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
+		}
+
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
 		{
 			if(routes == null)
 			{
@@ -45,13 +74,18 @@ namespace Magurany.Web.Routing.RegularExpressions
 			}
 
 			RegexRoute route = new RegexRoute(url, pattern, routeHandler);
-			route.Constraints = new RouteValueDictionary();
-			route.DataTokens = new RouteValueDictionary();
 			route.Defaults = new RouteValueDictionary(defaults);
-			
-			// Required so that the engine can find the proper view
-			if (defaults.ContainsKey("Area")) {
-				route.DataTokens.Add("Area", route.Defaults["Area"]);
+			route.Constraints = new RouteValueDictionary(constraints);
+			route.DataTokens = new RouteValueDictionary();
+
+			if(route.Defaults.ContainsKey("Area"))
+			{
+				route.DataTokens["Area"] = route.Defaults["Area"];
+			}
+
+			if(namespaces != null && namespaces.Length > 0)
+			{
+				route.DataTokens["Namespaces"] = namespaces;
 			}
 
 			routes.Add(name, route);

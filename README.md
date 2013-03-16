@@ -8,3 +8,7 @@ If you run into any trouble or have any suggestions, please log them in the [Iss
 #### v1.0.3
 
 * Created the RegexRoute class, which enables developers to include a regular expression for URL matching.
+
+#### v1.1.0
+
+* 

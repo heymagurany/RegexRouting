@@ -10,7 +10,7 @@
 		<projectUrl>https://github.com/honkywater/RegexRouting</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
-		<releaseNotes>Initial Release</releaseNotes>
+		<releaseNotes>Added Area Support.</releaseNotes>
 		<copyright>Copyright © Matt Magurany 2012</copyright>
 		<tags>asp.net, regex, regular expressions, routing, route</tags>
 	</metadata>

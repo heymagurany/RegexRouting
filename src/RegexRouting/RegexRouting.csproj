@@ -46,7 +46,9 @@
     <Compile Include="RegexRoute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\RegexRouting.nuspec" />
+    <None Include="Properties\RegexRouting.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
