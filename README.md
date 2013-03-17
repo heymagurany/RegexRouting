@@ -11,4 +11,5 @@ If you run into any trouble or have any suggestions, please log them in the [Iss
 
 #### v1.1.0
 
-* 
+* Added support for Areas
+* Added support for automatic constraint generation
