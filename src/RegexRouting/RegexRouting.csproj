@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexRoute.cs" />
+    <Compile Include="RouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\RegexRouting.nuspec">

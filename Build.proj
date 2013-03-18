@@ -11,8 +11,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<MajorNumber>1</MajorNumber>
-		<MinorNumber>1</MinorNumber>
+		<MajorNumber>2</MajorNumber>
+		<MinorNumber>0</MinorNumber>
 		<PatchNumber>0</PatchNumber>
 		<BuildNumber>0</BuildNumber>
 		<Version>$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)</Version>

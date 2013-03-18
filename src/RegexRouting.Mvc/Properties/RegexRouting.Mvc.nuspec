@@ -10,8 +10,11 @@
 		<projectUrl>https://github.com/honkywater/RegexRouting</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
-		<releaseNotes>Added Area support and automatic constraint generation.</releaseNotes>
+		<releaseNotes>Added route collection extension methods for simple route creation.</releaseNotes>
 		<copyright>Copyright © Matt Magurany 2012</copyright>
 		<tags>asp.net, regex, regular expressions, routing, route</tags>
-	</metadata>
+    <dependencies>
+      <dependency id="Magurany.Web.Routing.RegularExpressions" version="2.0.0" />
+    </dependencies>
+  </metadata>
 </package>

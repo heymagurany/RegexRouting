@@ -25,6 +25,7 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 			m_Pattern = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 			Constraints = new RouteValueDictionary(constraints);
+
 			if(AutoConstraints)
 			{
 				GenerateConstraintsFromPattern(pattern);
@@ -41,7 +42,7 @@ namespace Magurany.Web.Routing.RegularExpressions
 			string url = httpContext.Request.AppRelativeCurrentExecutionFilePath;
 			if(!UseLegacy)
 			{
-				url = url.Substring(2) + httpContext.Request.PathInfo;
+				url = url.Substring(1) + httpContext.Request.PathInfo;
 			}
 			Match match = m_Pattern.Match(url);
 

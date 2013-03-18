@@ -18,7 +18,8 @@
 
 	<ItemGroup>
 		<NuGetPackageProject
-			Include="$(SolutionDir)\RegexRouting\RegexRouting.csproj" />
+			Include="$(SolutionDir)\RegexRouting\RegexRouting.csproj;
+               $(SolutionDir)\RegexRouting.Mvc\RegexRouting.Mvc.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

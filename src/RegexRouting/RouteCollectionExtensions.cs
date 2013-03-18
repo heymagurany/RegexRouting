@@ -1,49 +1,13 @@
 ﻿using System;
-using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Http.WebHost;
 
 namespace Magurany.Web.Routing.RegularExpressions
 {
 	public static class RouteCollectionExtensions
 	{
-		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern)
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, IRouteHandler routeHandler)
 		{
-			return MapRegexHttpRoute(routes, name, url, pattern, null);
-		}
-
-		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, HttpControllerRouteHandler.Instance);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern)
-		{
-			return MapRegexRoute(routes, name, url, pattern, null);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces)
-		{
-			return MapRegexRoute(routes, name, url, pattern, namespaces, new MvcRouteHandler());
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, null, namespaces, new MvcRouteHandler());
-		}
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, constraints, null, new MvcRouteHandler());
+			return MapRegexRoute(routes, name, url, pattern, null, null, null, routeHandler);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, IRouteHandler routeHandler)
@@ -56,14 +20,14 @@ namespace Magurany.Web.Routing.RegularExpressions
 			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
 		}
 
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, IRouteHandler routeHandler)
 		{
 			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
 		}
 
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces, IRouteHandler routeHandler)
+		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces, IRouteHandler routeHandler)
 		{
-			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
+			return MapRegexRoute(routes, name, url, pattern, defaults, null, namespaces, routeHandler);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
