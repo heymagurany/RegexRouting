@@ -1,105 +1,39 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Http.WebHost;
+using Magurany.Web.Routing.RegularExpressions;
 
-namespace Magurany.Web.Routing.RegularExpressions
+namespace Magurany.Web.Mvc.RegularExpressions
 {
 	public static class RouteCollectionExtensions
 	{
-		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern)
-		{
-			return MapRegexHttpRoute(routes, name, url, pattern, null);
-		}
-
-		public static RegexRoute MapRegexHttpRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, HttpControllerRouteHandler.Instance);
-		}
-
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern)
 		{
-			return MapRegexRoute(routes, name, url, pattern, null);
+			return routes.MapRegexRoute(name, url, pattern, null, null, null, new MvcRouteHandler());
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
 		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
+			return routes.MapRegexRoute(name, url, pattern, defaults, null, null, new MvcRouteHandler());
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces)
 		{
-			return MapRegexRoute(routes, name, url, pattern, namespaces, new MvcRouteHandler());
+			return routes.MapRegexRoute(name, url, pattern, null, null, namespaces, new MvcRouteHandler());
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints)
 		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, new MvcRouteHandler());
+			return routes.MapRegexRoute(name, url, pattern, defaults, null, null, new MvcRouteHandler());
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces)
 		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, null, namespaces, new MvcRouteHandler());
+			return routes.MapRegexRoute(name, url, pattern, defaults, null, namespaces, new MvcRouteHandler());
 		}
+
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces)
 		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, constraints, null, new MvcRouteHandler());
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, IRouteHandler routeHandler)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces, IRouteHandler routeHandler)
-		{
-			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
-		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces, IRouteHandler routeHandler)
-		{
-			return MapRegexRoute(routes, name, url, pattern, null, null, namespaces, routeHandler);
-		}
-
-		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces, IRouteHandler routeHandler)
-		{
-			if(routes == null)
-			{
-				throw new ArgumentNullException("routes");
-			}
-
-			if(url == null)
-			{
-				throw new ArgumentNullException("url");
-			}
-
-			if(pattern == null)
-			{
-				throw new ArgumentNullException("pattern");
-			}
-
-			RegexRoute route = new RegexRoute(url, pattern, constraints, routeHandler);
-			route.Defaults = new RouteValueDictionary(defaults);
-			route.DataTokens = new RouteValueDictionary();
-
-			if(route.Defaults.ContainsKey("Area"))
-			{
-				route.DataTokens["Area"] = route.Defaults["Area"];
-			}
-
-			if(namespaces != null && namespaces.Length > 0)
-			{
-				route.DataTokens["Namespaces"] = namespaces;
-			}
-
-			routes.Add(name, route);
-
-			return route;
+			return routes.MapRegexRoute(name, url, pattern, defaults, constraints, namespaces, new MvcRouteHandler());
 		}
 	}
 }
