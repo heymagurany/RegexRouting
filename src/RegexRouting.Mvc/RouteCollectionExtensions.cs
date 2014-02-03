@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Routing;
 using Magurany.Web.Routing.RegularExpressions;
 
@@ -8,32 +10,60 @@ namespace Magurany.Web.Mvc.RegularExpressions
 	{
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern)
 		{
-			return routes.MapRegexRoute(name, url, pattern, null, null, null, new MvcRouteHandler());
+			return MapRegexRoute(routes, name, url, pattern, null, null, null);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults)
 		{
-			return routes.MapRegexRoute(name, url, pattern, defaults, null, null, new MvcRouteHandler());
+            return MapRegexRoute(routes, name, url, pattern, defaults, null, null);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, string[] namespaces)
 		{
-			return routes.MapRegexRoute(name, url, pattern, null, null, namespaces, new MvcRouteHandler());
+            return MapRegexRoute(routes, name, url, pattern, null, null, namespaces);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints)
 		{
-			return routes.MapRegexRoute(name, url, pattern, defaults, null, null, new MvcRouteHandler());
+            return MapRegexRoute(routes, name, url, pattern, defaults, constraints, null);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces)
 		{
-			return routes.MapRegexRoute(name, url, pattern, defaults, null, namespaces, new MvcRouteHandler());
+            return MapRegexRoute(routes, name, url, pattern, defaults, null, namespaces);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, string[] namespaces)
 		{
-			return routes.MapRegexRoute(name, url, pattern, defaults, constraints, namespaces, new MvcRouteHandler());
+            if (routes == null)
+            {
+                throw new ArgumentNullException("routes");
+            }
+
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
+            if (pattern == null)
+            {
+                throw new ArgumentNullException("pattern");
+            }
+
+            var route = new RegexRoute(url, pattern, constraints, new MvcRouteHandler())
+            {
+                DataTokens = new RouteValueDictionary(),
+                Defaults = new RouteValueDictionary(defaults)
+            };
+
+            if (namespaces != null && namespaces.Length > 0)
+            {
+                route.DataTokens["Namespaces"] = namespaces;
+            }
+
+            routes.Add(name, route);
+
+            return route;
 		}
 	}
 }

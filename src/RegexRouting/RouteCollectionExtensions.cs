@@ -22,7 +22,7 @@ namespace Magurany.Web.Routing.RegularExpressions
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, object constraints, IRouteHandler routeHandler)
 		{
-			return MapRegexRoute(routes, name, url, pattern, defaults, null, null, routeHandler);
+			return MapRegexRoute(routes, name, url, pattern, defaults, constraints, null, routeHandler);
 		}
 
 		public static RegexRoute MapRegexRoute(this RouteCollection routes, string name, string url, string pattern, object defaults, string[] namespaces, IRouteHandler routeHandler)
@@ -47,11 +47,13 @@ namespace Magurany.Web.Routing.RegularExpressions
 				throw new ArgumentNullException("pattern");
 			}
 
-			RegexRoute route = new RegexRoute(url, pattern, constraints, routeHandler);
-			route.Defaults = new RouteValueDictionary(defaults);
-			route.DataTokens = new RouteValueDictionary();
+			var route = new RegexRoute(url, pattern, constraints, routeHandler)
+			{
+			    Defaults = new RouteValueDictionary(defaults),
+                DataTokens = new RouteValueDictionary()
+			};
 
-			if(route.Defaults.ContainsKey("Area"))
+		    if(route.Defaults.ContainsKey("Area"))
 			{
 				route.DataTokens["Area"] = route.Defaults["Area"];
 			}
