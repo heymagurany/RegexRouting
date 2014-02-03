@@ -5,9 +5,13 @@ If you run into any trouble or have any suggestions, please log them in the [Iss
 
 ### Changelog
 
-#### v1.0.3
+#### v2.1.0
 
-* Created the RegexRoute class, which enables developers to include a regular expression for URL matching.
+* Added support for manual constraints and added extension methods to easily add routes to for an area.
+
+#### v2.0.0
+
+* Added a separate package for meant to me used along side ASP.NET MVC which simplifies route creation via extension methods.
 
 #### v1.1.0
 
@@ -16,6 +20,6 @@ If you run into any trouble or have any suggestions, please log them in the [Iss
 * Added support for Areas
 * Added support for automatic constraint generation
 
-#### v2.0.0
+#### v1.0.3
 
-* Added a separate package for meant to me used along side ASP.NET MVC which simplifies route creation via extension methods.
+* Created the RegexRoute class, which enables developers to include a regular expression for URL matching.
