@@ -40,7 +40,7 @@
 			Command="&quot;$(NuGetExePath)&quot; pack &quot;%(NuGetPackageProject.FullPath)&quot; -Version $(NuGetPackageVersion) -Properties OutDir=$(OutDir) -OutputDirectory &quot;$(OutDir.TrimEnd('\\'))&quot;"
 			WorkingDirectory="$(NuGetDirectory)" />
 		<CreateItem
-			Include="$(OutDir)*.nupkg">
+			Include="$(OutDir)*.$(NuGetPackageVersion).nupkg">
 			<Output ItemName="NuGetPackageFileName" TaskParameter="Include" />
 		</CreateItem>
 	</Target>
