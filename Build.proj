@@ -1,75 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Build" ToolsVersion="4.0">
 
-	<PropertyGroup>
-		<NuGetDirectory>$(MSBuildProjectDirectory)\nuget</NuGetDirectory>
-		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildProjectDirectory)\src</SolutionDir>
-		<SolutionFileName>$(SolutionDir)\RegexRouting.sln</SolutionFileName>
-		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
-		<Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
-		<OutDir Condition="'$(OutDir)'==''">$(MSBuildProjectDirectory)\bin\$(Configuration)\</OutDir>
-	</PropertyGroup>
+  <PropertyGroup>
+    <NuGetDirectory>$(MSBuildProjectDirectory)\nuget</NuGetDirectory>
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildProjectDirectory)\src</SolutionDir>
+    <SolutionFileName>$(SolutionDir)\RegexRouting.sln</SolutionFileName>
+    <Configuration Condition="'$(Configuration)'==''">Release</Configuration>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <OutDir Condition="'$(OutDir)'==''">$(MSBuildProjectDirectory)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<MajorNumber>2</MajorNumber>
-		<MinorNumber>1</MinorNumber>
-		<PatchNumber>0</PatchNumber>
-		<BuildNumber>0</BuildNumber>
-		<Version>$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)</Version>
-	</PropertyGroup>
+  <PropertyGroup>
+    <MajorNumber>2</MajorNumber>
+    <MinorNumber>1</MinorNumber>
+    <PatchNumber>0</PatchNumber>
+    <BuildNumber>0</BuildNumber>
+    <Version>$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)</Version>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<Projects
+  <ItemGroup>
+    <Projects
 			Include="$(SolutionDir)\**\*.csproj" />
-	</ItemGroup>
+  </ItemGroup>
 
-	<PropertyGroup>
-		<BuildDependsOn>
-			BeforeBuild;
-			IncrementBuildNumber;
-			CoreBuild;
-			AfterBuild
-		</BuildDependsOn>
-	</PropertyGroup>
+  <PropertyGroup>
+    <BuildDependsOn>
+      BeforeBuild;
+      IncrementBuildNumber;
+      CoreBuild;
+      AfterBuild
+    </BuildDependsOn>
+  </PropertyGroup>
 
-	<Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
 
-	<Target Name="BeforeBuild" />
+  <Target Name="BeforeBuild" />
 
-	<Target Name="IncrementBuildNumber">
-		<ReadLinesFromFile
+  <Target Name="IncrementBuildNumber">
+    <ReadLinesFromFile
 			File="Build.txt">
-			<Output PropertyName="BuildNumber" TaskParameter="Lines" />
-		</ReadLinesFromFile>
-		<CreateProperty
+      <Output PropertyName="BuildNumber" TaskParameter="Lines" />
+    </ReadLinesFromFile>
+    <CreateProperty
 			Value="$([MSBuild]::Add($(BuildNumber), 1))">
-			<Output PropertyName="BuildNumber" TaskParameter="Value" />
-		</CreateProperty>
-		<WriteLinesToFile
+      <Output PropertyName="BuildNumber" TaskParameter="Value" />
+    </CreateProperty>
+    <WriteLinesToFile
 			File="Build.txt"
 			Lines="$(BuildNumber)"
 			Overwrite="true" />
-		<CreateProperty
+    <CreateProperty
 			Value="$(MajorNumber).$(MinorNumber).$(PatchNumber).$(BuildNumber)">
-			<Output PropertyName="Version" TaskParameter="Value" />
-		</CreateProperty>
-	</Target>
+      <Output PropertyName="Version" TaskParameter="Value" />
+    </CreateProperty>
+  </Target>
 
-	<Target Name="CoreBuild">
-		<MSBuild
+  <Target Name="CoreBuild">
+    <MSBuild
 			Projects="@(Projects)"
 			Properties="Configuration=$(Configuration);
 				        OutDir=$(OutDir);
 				        SignAssembly=true;
-						Version=$(Version);
+                Version=$(Version);
 				        AssemblyOriginatorKeyFile=$(AssemblyOriginatorKeyFile)"
 			Targets="Build" />
-	</Target>
+  </Target>
 
-	<Target Name="AfterBuild" />
-	
-	<!-- TODO: Run tests... WHen I create them -->
+  <Target Name="AfterBuild" />
 
-	<Import Project="$(NuGetDirectory)\NuGet.targets" />
+  <!-- TODO: Run tests... When I create them -->
 
-</Project> 
+  <Import Project="$(NuGetDirectory)\NuGet.targets" />
+
+</Project>
